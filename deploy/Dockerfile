@@ -20,6 +20,9 @@ RUN a2enmod rewrite
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set environment variable to allow Composer plugins to run as root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # Set working directory
 WORKDIR /var/www/html
 
