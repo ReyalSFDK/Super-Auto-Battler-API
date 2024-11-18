@@ -2,17 +2,15 @@ FROM php:8.2-cli
 
 RUN apt-get update -y && apt-get install -y libmcrypt-dev git openssl zip unzip
 
-RUN curl -sS https://get.symfony.com/cli/installer | bash
-RUN export PATH="$HOME/.symfony5/bin:$PATH"
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /app
-COPY . /app
+WORKDIR /var/www/html
+COPY . .
 
 RUN composer install --no-scripts
 
-EXPOSE 8000
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
 
-CMD ["php bin/console server:start 0.0.0.0:8000"]
+EXPOSE 80
 
+CMD ["apache2-foreground"]
