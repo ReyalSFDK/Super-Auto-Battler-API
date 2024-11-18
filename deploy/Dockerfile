@@ -10,7 +10,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /app
 COPY . /app
 
-RUN composer install
+RUN composer install --no-scripts
 
 EXPOSE 8000
 
