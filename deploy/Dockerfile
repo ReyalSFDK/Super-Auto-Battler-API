@@ -29,9 +29,6 @@ COPY . .
 # Install PHP dependencies including dev dependencies
 RUN composer install --no-scripts
 
-# Set appropriate permissions
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
-
 # Expose port 80
 EXPOSE 80
 
