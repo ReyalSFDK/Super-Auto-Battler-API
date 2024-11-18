@@ -1,15 +1,39 @@
-FROM php:8.2-cli
-WORKDIR /usr/src/app
+# Use the official PHP image with Apache
+FROM php:8.2-apache
 
-RUN apt-get update -y && apt-get install -y libmcrypt-dev git openssl zip unzip
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libicu-dev \
+    libpq-dev \
+    libzip-dev \
+    && docker-php-ext-install \
+    intl \
+    pdo \
+    pdo_mysql \
+    zip
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
 
-COPY . /usr/src/app/
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy the application code
+COPY . .
+
+# Install PHP dependencies including dev dependencies
 RUN composer install --no-scripts
 
-# Copy application code
+# Set appropriate permissions
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
 
-# Set the default command to run Apache in the foreground
+# Expose port 80
+EXPOSE 80
+
+# Start Apache server
 CMD ["apache2-foreground"]
