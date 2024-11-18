@@ -1,39 +1,15 @@
-# Use the official PHP image with Apache
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libicu-dev \
-    libpq-dev \
-    libzip-dev \
-    && docker-php-ext-install \
-    intl \
-    pdo \
-    pdo_mysql \
-    zip
+RUN apt-get update -y && apt-get install -y libmcrypt-dev git openssl zip unzip
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+WORKDIR /app
+COPY . /app
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy the application code
-COPY . .
-
-# Install PHP dependencies
 RUN composer install
 
-# Set appropriate permissions
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
+EXPOSE 8000
 
-# Expose port 80
-EXPOSE 80
+CMD ["php bin/console server:start 0.0.0.0:8000"]
 
-# Start Apache server
-CMD ["apache2-foreground"]
