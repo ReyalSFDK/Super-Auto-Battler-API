@@ -29,4 +29,18 @@ class CharactersRepository {
 	public function getCharactersList(): array {
 		return $this->charactersList;
 	}
+
+	/**
+	 * @param string $identifier
+	 * @return Character|null
+	 */
+	public function getCharacter(string $identifier): ?Character {
+		foreach ($this->charactersList as $character) {
+			if ($character->getIdentifier() === $identifier) {
+				return $character;
+			}
+		}
+
+		return null;
+	}
 }
