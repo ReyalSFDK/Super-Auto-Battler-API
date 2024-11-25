@@ -79,31 +79,6 @@ class Character {
 	}
 
 	/**
-	 * Calculate damage on attack
-	 * @return int Character total damage points
-	 */
-	public function doAttack(): int {
-		return $this->getDamage();
-	}
-
-	/**
-	 * Receive damage on received attack
-	 * @param int $damage Opponent damage points
-	 * @return int Remaining health points
-	 */
-	public function receiveAttackDamage(int $damage): int {
-		$remainingHealth = $this->getHealth() - $damage;
-
-		if ($remainingHealth < 0) {
-			$this->setHealth(0);
-			return 0;
-		}
-
-		$this->setHealth($remainingHealth);
-		return $this->getHealth();
-	}
-
-	/**
 	 * Convert object to JSON
 	 * @return array
 	 */
