@@ -15,6 +15,7 @@ class CharactersController extends AbstractController
 		private readonly CharactersRepository $charactersRepository,
 	) { }
 
+    #[Route('/', name: 'list', methods: ['GET'])]
 	public function list(): Response
 	{
 		$charactersList = $this->charactersRepository->getCharactersList();
