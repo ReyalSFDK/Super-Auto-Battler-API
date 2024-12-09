@@ -81,4 +81,13 @@ class BattlerCharacter
 		return $this->currentHealth;
 	}
 
+	public function toJson(): array
+	{
+		return [
+			'id' => $this->id,
+			'name' => $this->character->getIdentifier(),
+			'health' => $this->currentHealth,
+			'damage' => $this->baseDamage,
+		];
+	}
 }

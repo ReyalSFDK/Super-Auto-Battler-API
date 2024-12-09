@@ -42,11 +42,25 @@ class BattleService
 		$enemies = $this->generateEnemies(count($playerTeam));
 		$this->setupTeams($playerTeam, $enemies);
 
+
+		$initialPlayerTeam = array_map(
+			fn(BattlerCharacter $character) => $character->toJson(),
+			$this->playerTeam,
+		);
+		$initialEnemyTeam = array_map(
+			fn(BattlerCharacter $character) => $character->toJson(),
+			$this->enemyTeam,
+		);
+
 		while ($this->canContinue()) {
 			$this->onAttack();
 		}
 
-		return $this->battleActionsService->getActions();
+		return [
+			'player_team' => $initialPlayerTeam,
+			'enemy_team' => $initialEnemyTeam,
+			'actions' => $this->battleActionsService->getActions(),
+		];
 	}
 
 	/**
